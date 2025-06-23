@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    //id("com.google.devtools.ksp")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -33,9 +36,28 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures{
+        viewBinding = true
+    }
 }
 
 dependencies {
+    //hilt
+    implementation("com.google.dagger:hilt-android:2.56.2")
+    kapt("com.google.dagger:hilt-android-compiler:2.56.2")
+    //ksp("com.google.dagger:hilt-android-compiler:2.56.2")
+
+    //retrofit
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
+    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+
+    //mvvm
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$2.9.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$2.9.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$2.9.1")
+    //picasso
+    implementation("com.squareup.picasso:picasso:2.8")
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
