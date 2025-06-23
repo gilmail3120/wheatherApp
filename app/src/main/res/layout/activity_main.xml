@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardClimaHoje"
+        android:layout_width="350dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="32dp"
+        app:cardCornerRadius="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/textClimaStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Nublado"
+                app:layout_constraintEnd_toEndOf="@+id/textHojeData"
+                app:layout_constraintStart_toStartOf="@+id/textHojeData"
+                app:layout_constraintTop_toBottomOf="@+id/textHojeData" />
+
+            <TextView
+                android:id="@+id/textMinimaMaxima"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="24/28"
+                app:layout_constraintEnd_toEndOf="@+id/textClimaStatus"
+                app:layout_constraintStart_toStartOf="@+id/textClimaStatus"
+                app:layout_constraintTop_toBottomOf="@+id/textClimaStatus" />
+
+            <TextView
+                android:id="@+id/textHojeData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Hoje"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageClimaHoje"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageClimaHoje"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/sol" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imageView5"
+                        android:layout_width="20dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@drawable/umidade" />
+
+                    <TextView
+                        android:id="@+id/textClimaUmidade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="30%"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="30dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@drawable/uv" />
+
+                    <TextView
+                        android:id="@+id/textClimaUv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="20%"
+                        android:textSize="10sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleClimaDias"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerClimaHora"
+        tools:listitem="@layout/item_clima_dias" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerClimaHora"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="vertical"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardClimaHoje"
+        tools:itemCount="7"
+        tools:listitem="@layout/item_clima_hora" />
+</androidx.constraintlayout.widget.ConstraintLayout>
