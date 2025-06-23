@@ -43,20 +43,20 @@ android {
 
 dependencies {
     //hilt
-    implementation("com.google.dagger:hilt-android:2.56.2")
-    kapt("com.google.dagger:hilt-android-compiler:2.56.2")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
     //ksp("com.google.dagger:hilt-android-compiler:2.56.2")
 
     //retrofit
-    implementation("com.squareup.retrofit2:retrofit:3.0.0")
-    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.converter.gson)
 
     //mvvm
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$2.9.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$2.9.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$2.9.1")
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
     //picasso
-    implementation("com.squareup.picasso:picasso:2.8")
+    implementation(libs.picasso)
 
 
     implementation(libs.androidx.core.ktx)
