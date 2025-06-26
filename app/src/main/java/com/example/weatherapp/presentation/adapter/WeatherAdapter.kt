@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.weatherapp.databinding.ItemClimaHoraBinding
 import com.example.weatherapp.domain.model.previsao5dias.WeatherPrevisoes
+import com.example.weatherapp.help.Conversor
 import com.example.weatherapp.presentation.adapter.WeatherAdapter.WeatherViewHolder
+import com.squareup.picasso.Picasso
 
 class WeatherAdapter() : Adapter<WeatherViewHolder>() {
     private var listaWeather = listOf<WeatherPrevisoes>()
@@ -19,8 +21,13 @@ class WeatherAdapter() : Adapter<WeatherViewHolder>() {
     inner class WeatherViewHolder(private val binding: ItemClimaHoraBinding) :
         ViewHolder(binding.root) {
         fun bind(clima: WeatherPrevisoes) {
-            binding.textHora.text = clima.date
-            binding.textGraus.text = clima.temperature.toString()
+            val dataFormata = Conversor.formaTempo(clima.date)
+            val celsius = Conversor.formataTempKelvinCelsius(clima.temperature)
+            binding.textHora.text = dataFormata
+            binding.textGraus.text = celsius
+            Picasso.get()
+                .load(clima.iconUrl)
+                .into(binding.imageHora)
         }
     }
 
