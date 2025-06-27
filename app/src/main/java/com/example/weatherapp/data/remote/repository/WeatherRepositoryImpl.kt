@@ -7,6 +7,7 @@ import com.example.weatherapp.domain.model.previsao5dias.WheatherPrevisoesDias
 import com.example.weatherapp.domain.model.previsao5dias.Wind
 import com.example.weatherapp.domain.model.previsaoagora.CurrentTime
 import com.example.weatherapp.domain.model.previsaoagora.PrevisaoAtual
+import com.example.weatherapp.help.Mensagem
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(val weatherAPI: IWeatherAPI, val apiKey: String) :
@@ -33,7 +34,6 @@ class WeatherRepositoryImpl @Inject constructor(val weatherAPI: IWeatherAPI, val
             }
         } catch (erro: Exception) {
             erro.printStackTrace()
-            Log.i("resposta", "repositoryHoras:$erro ")
         }
         return emptyList()
     }

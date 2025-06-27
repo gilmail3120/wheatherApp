@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.help.Conversor
+import com.example.weatherapp.help.Mensagem
 import com.example.weatherapp.presentation.adapter.DiasAdapter
 import com.example.weatherapp.presentation.adapter.HorasAdapter
 import com.example.weatherapp.presentation.viewModel.WeatherViewModel
@@ -74,7 +75,6 @@ class MainActivity : AppCompatActivity() {
 
                 return true
             }
-
             override fun onQueryTextChange(query: String?): Boolean {
                 return false
             }
@@ -82,21 +82,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observaveis() {
+        weatherViewModel.mensagemErro.observe(this) { erro->
+            Mensagem.exibir(this,erro)
+        }
         weatherViewModel.listaClimaHoras.observe(this) { listaHoras ->
             listaHoras?.let {
                 adapterHoras.adicionarLista(listaHoras)
-                Log.i("resposta", "observaveis:$listaHoras")
+
             }
         }
         weatherViewModel.listaClimaDias.observe(this) { listaDias ->
             listaDias?.let {
                 adapterDias.adicionarLista(listaDias)
-                Log.i("respostaDias", "ObserveDias:$listaDias")
+
             }
         }
-
         weatherViewModel.listaAtual.observe(this) { atual ->
-            Log.i("respostaAtual", "ObserveDias:$atual")
             val dataFormatada = Conversor.formataDataMes(atual.dt)
             with(binding) {
                 textHojeData.text = dataFormatada
@@ -111,14 +112,10 @@ class MainActivity : AppCompatActivity() {
                         .placeholder(R.drawable.loading)
                         .error(R.drawable.ic_broken_image)
                         .into(imageClimaHoje)
-                } else {
-                    Toast.makeText(this@MainActivity, "Imagem nao carregada", Toast.LENGTH_SHORT)
-                        .show()
                 }
             }
         }
     }
-
     private fun iniciarAdapterHoras() {
         adapterHoras = HorasAdapter()
         with(binding) {

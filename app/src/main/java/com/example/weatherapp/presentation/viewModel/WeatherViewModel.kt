@@ -24,28 +24,59 @@ class WeatherViewModel @Inject constructor(val weatherRepositoryImpl: IWeatherRe
     val listaClimaDias: LiveData<List<WheatherPrevisoesDias>?>
         get() = _listaClimaDias
 
+    private val _mensagemErro = MutableLiveData<String>()
+    val mensagemErro: LiveData<String>
+        get() = _mensagemErro
+
     private val _listaAtual = MutableLiveData<PrevisaoAtual>()
     val listaAtual: LiveData<PrevisaoAtual>
         get() = _listaAtual
 
     fun obterPrevisoesHoras(cidade: String) {
         viewModelScope.launch {
-            val lista = weatherRepositoryImpl.obterPrevisaoHoras(cidade)
-            Log.i("resposta", "viewModel:$lista ")
-            _listaClimaHoras.postValue(lista)
+            try {
+                val lista = weatherRepositoryImpl.obterPrevisaoHoras(cidade)
+                if (lista.isEmpty()) {
+                    _mensagemErro.postValue("Não encontrato.")
+                } else {
+                    _listaClimaHoras.postValue(lista)
+                }
+            } catch (erro: Exception) {
+                erro.printStackTrace()
+                _mensagemErro.postValue("Erro ao carregar previsões de horas $erro")
+            }
         }
     }
 
-    fun obterPrevisaoDias(cidade:String){
+    fun obterPrevisaoDias(cidade: String) {
         viewModelScope.launch {
-            val lista = weatherRepositoryImpl.obterPrevisaoDias(cidade)
-            _listaClimaDias.postValue(lista)
+            try {
+                val lista = weatherRepositoryImpl.obterPrevisaoDias(cidade)
+                if (lista.isEmpty()){
+                    _mensagemErro.postValue("Não encontrado")
+                }else{
+                    _listaClimaDias.postValue(lista)
+                }
+            } catch (erro: Exception) {
+                erro.printStackTrace()
+                _mensagemErro.postValue("Erro ao carregar previsões de dias.$erro")
+            }
         }
     }
-    fun obterPrevisaoAtual(cidade:String){
+
+    fun obterPrevisaoAtual(cidade: String) {
         viewModelScope.launch {
-            val lista = weatherRepositoryImpl.obterPrevisaoAtual(cidade)
-            _listaAtual.postValue(lista)
+            try {
+                val lista = weatherRepositoryImpl.obterPrevisaoAtual(cidade)
+                if ( lista== null){
+                    _mensagemErro.postValue("Não encontrado")
+                }else{
+                    _listaAtual.postValue(lista)
+                }
+            }catch(erro: Exception){
+                erro.printStackTrace()
+                _mensagemErro.postValue("Erro ao carregar previsões de atuais.$erro")
+            }
         }
     }
 }
