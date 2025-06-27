@@ -5,29 +5,33 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.weatherapp.databinding.ItemClimaHoraBinding
-import com.example.weatherapp.domain.model.previsao5dias.WeatherPrevisoes
+import com.example.weatherapp.domain.model.previsao5dias.WeatherPrevisoesHoras
 import com.example.weatherapp.help.Conversor
-import com.example.weatherapp.presentation.adapter.WeatherAdapter.WeatherViewHolder
+import com.example.weatherapp.presentation.adapter.HorasAdapter.WeatherViewHolder
 import com.squareup.picasso.Picasso
 
-class WeatherAdapter() : Adapter<WeatherViewHolder>() {
-    private var listaWeather = listOf<WeatherPrevisoes>()
+class HorasAdapter() : Adapter<WeatherViewHolder>() {
+    private var listaHoras = listOf<WeatherPrevisoesHoras>()
 
-    fun adicionarLista(lista: List<WeatherPrevisoes>) {
-        listaWeather = lista
+    fun adicionarLista(lista: List<WeatherPrevisoesHoras>) {
+        listaHoras = lista
         notifyDataSetChanged()
     }
 
     inner class WeatherViewHolder(private val binding: ItemClimaHoraBinding) :
         ViewHolder(binding.root) {
-        fun bind(clima: WeatherPrevisoes) {
+        fun bind(clima: WeatherPrevisoesHoras) {
             val dataFormata = Conversor.formaTempo(clima.date)
             val celsius = Conversor.formataTempKelvinCelsius(clima.temperature)
-            binding.textHora.text = dataFormata
-            binding.textGraus.text = celsius
-            Picasso.get()
-                .load(clima.iconUrl)
-                .into(binding.imageHora)
+            with(binding){
+                textHora.text = dataFormata
+                textGraus.text = celsius
+                clima.iconUrl.let {
+                    Picasso.get()
+                        .load(clima.iconUrl)
+                        .into(imageHora)
+                }
+            }
         }
     }
 
@@ -38,12 +42,12 @@ class WeatherAdapter() : Adapter<WeatherViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
-        val lista = listaWeather[position]
+        val lista = listaHoras[position]
         holder.bind(lista)
     }
 
     override fun getItemCount(): Int {
-        return listaWeather.size
+        return listaHoras.size
     }
 
 }

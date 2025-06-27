@@ -109,7 +109,7 @@
                         android:id="@+id/imageView6"
                         android:layout_width="30dp"
                         android:layout_height="40dp"
-                        app:srcCompat="@drawable/uv" />
+                        app:srcCompat="@drawable/vento" />
 
                     <TextView
                         android:id="@+id/textClimaUv"
@@ -137,7 +137,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerClimaHora"
         app:layout_constraintVertical_bias="0.0"
-        tools:listitem="@layout/item_clima_dias" />
+        tools:listitem="@layout/item_clima_dias" >
+
+    </androidx.recyclerview.widget.RecyclerView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerClimaHora"

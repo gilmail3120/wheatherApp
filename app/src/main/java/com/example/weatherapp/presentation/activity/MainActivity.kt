@@ -11,13 +11,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.ActivityMainBinding
-import com.example.weatherapp.presentation.adapter.WeatherAdapter
+import com.example.weatherapp.help.Conversor
+import com.example.weatherapp.presentation.adapter.DiasAdapter
+import com.example.weatherapp.presentation.adapter.HorasAdapter
 import com.example.weatherapp.presentation.viewModel.WeatherViewModel
+import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private lateinit var adapterWeather: WeatherAdapter
+    private lateinit var adapterHoras: HorasAdapter
+    private lateinit var adapterDias: DiasAdapter
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val weatherViewModel: WeatherViewModel by viewModels()
     private var pesquisa: String = "nova york"
@@ -31,9 +35,22 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        iniciarAdapter()
+        iniciarAdapterHoras()
+        iniciarAdapterDias()
         observaveis()
         searchViewPesquisa()
+    }
+    override fun onStart() {
+        super.onStart()
+        weatherViewModel.obterPrevisoesHoras(pesquisa)
+        weatherViewModel.obterPrevisaoDias(pesquisa)
+        weatherViewModel.obterPrevisaoAtual(pesquisa)
+    }
+    private fun iniciarAdapterDias() {
+        adapterDias = DiasAdapter()
+        binding.recycleClimaDias.adapter = adapterDias
+        binding.recycleClimaDias.layoutManager =
+            LinearLayoutManager(this, RecyclerView.VERTICAL, false)
     }
 
     private fun searchViewPesquisa() {
@@ -43,31 +60,49 @@ class MainActivity : AppCompatActivity() {
                 pesquisa = query.toString()
                 return true
             }
-            override fun onQueryTextChange(query: String?): Boolean {
 
+            override fun onQueryTextChange(query: String?): Boolean {
                 return true
             }
         })
     }
 
     private fun observaveis() {
-        weatherViewModel.listaClima.observe(this) { lista ->
-           lista?.let {
-               adapterWeather.adicionarLista(lista)
-               Log.i("resposta", "observaveis:$lista ")
-           }
+        weatherViewModel.listaClimaHoras.observe(this) { listaHoras ->
+            listaHoras?.let {
+                adapterHoras.adicionarLista(listaHoras)
+                Log.i("resposta", "observaveis:$listaHoras")
+            }
+        }
+
+        weatherViewModel.listaClimaDias.observe(this) { listaDias ->
+            listaDias?.let {
+                adapterDias.adicionarLista(listaDias)
+                Log.i("respostaDias", "ObserveDias:$listaDias")
+            }
+        }
+
+        weatherViewModel.listaAtual.observe(this){atual->
+            Log.i("respostaAtual", "ObserveDias:$atual")
+            val dataFormatada = Conversor.formataDataMes(atual.dt)
+            with(binding){
+                textHojeData.text = dataFormatada
+                textClimaStatus.text = atual.description
+                textMinimaMaxima.text = atual.temp.toString()
+                textClimaUmidade.text="${atual.humidity} %"
+                textClimaUv.text=atual.wind.speed.toString()
+                Picasso.get()
+                    .load(atual.icon)
+                    .into(imageClimaHoje)
+            }
+
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        weatherViewModel.obterPrevisoes(pesquisa)
-    }
-
-    private fun iniciarAdapter() {
-        adapterWeather = WeatherAdapter()
+    private fun iniciarAdapterHoras() {
+        adapterHoras = HorasAdapter()
         with(binding) {
-            recyclerClimaHora.adapter = adapterWeather
+            recyclerClimaHora.adapter = adapterHoras
             recyclerClimaHora.layoutManager =
                 LinearLayoutManager(applicationContext, RecyclerView.HORIZONTAL, false)
         }

@@ -44,6 +44,7 @@ android {
 dependencies {
     //hilt
     implementation(libs.hilt.android)
+    implementation(libs.androidx.legacy.support.v4)
     kapt(libs.hilt.android.compiler)
     //ksp("com.google.dagger:hilt-android-compiler:2.56.2")
 

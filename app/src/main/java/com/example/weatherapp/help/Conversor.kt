@@ -15,4 +15,16 @@ object Conversor {
         return String.format("%.1f°C", celsius)
     }
 
+    fun formataDataSemana(timesTamp:Int):String{
+        val data = Date(timesTamp.toLong()*1000)
+        val formatada = SimpleDateFormat("EEEE", Locale("pt","BR"))
+        return formatada.format(data).replaceFirstChar { it.uppercase() }
+    }
+
+    fun formataDataMes(timesTamp:Int):String{
+        val data = Date(timesTamp.toLong()*1000)
+        val formatada = SimpleDateFormat("dd  MMMM", Locale("pt","BR"))
+        return formatada.format(data).replaceFirstChar { it.uppercase() }
+    }
+
 }
