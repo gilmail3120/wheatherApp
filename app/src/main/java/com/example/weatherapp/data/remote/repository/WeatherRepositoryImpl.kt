@@ -47,7 +47,7 @@ class WeatherRepositoryImpl @Inject constructor(val weatherAPI: IWeatherAPI, val
                     Log.i("respostaDias", "repositoryDias:$retorno")
                     val wheather = retorno.main
                     val date = retorno.dt
-                    val status = retorno.weather.map { it.description }
+                    val status = retorno.weather[0].description
                     val temp_max = wheather.temp_max
                     val temp_min = wheather.temp_min
                     val iconUrl =
@@ -71,7 +71,7 @@ class WeatherRepositoryImpl @Inject constructor(val weatherAPI: IWeatherAPI, val
                 Log.i("respostaAtual", "ObserveDias:$resultado")
                 val name = resultado.name
                 val data = resultado.dt
-                val descricao = resultado.weather.map { it.description }
+                val descricao = resultado.weather[0].description
                 val temp = resultado.main.temp
                 val humidade = resultado.main.humidity
                 val vento = resultado.wind

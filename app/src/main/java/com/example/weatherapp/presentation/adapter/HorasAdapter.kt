@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.example.weatherapp.R
 import com.example.weatherapp.databinding.ItemClimaHoraBinding
 import com.example.weatherapp.domain.model.previsao5dias.WeatherPrevisoesHoras
 import com.example.weatherapp.help.Conversor
@@ -29,6 +30,8 @@ class HorasAdapter() : Adapter<WeatherViewHolder>() {
                 clima.iconUrl.let {
                     Picasso.get()
                         .load(clima.iconUrl)
+                        .placeholder(R.drawable.loading)
+                        .error(R.drawable.ic_broken_image)
                         .into(imageHora)
                 }
             }

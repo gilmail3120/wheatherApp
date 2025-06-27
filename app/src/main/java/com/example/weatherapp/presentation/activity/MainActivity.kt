@@ -2,6 +2,7 @@ package com.example.weatherapp.presentation.activity
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,7 @@ import com.example.weatherapp.presentation.adapter.HorasAdapter
 import com.example.weatherapp.presentation.viewModel.WeatherViewModel
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -40,12 +42,14 @@ class MainActivity : AppCompatActivity() {
         observaveis()
         searchViewPesquisa()
     }
+
     override fun onStart() {
         super.onStart()
         weatherViewModel.obterPrevisoesHoras(pesquisa)
         weatherViewModel.obterPrevisaoDias(pesquisa)
         weatherViewModel.obterPrevisaoAtual(pesquisa)
     }
+
     private fun iniciarAdapterDias() {
         adapterDias = DiasAdapter()
         binding.recycleClimaDias.adapter = adapterDias
@@ -57,12 +61,22 @@ class MainActivity : AppCompatActivity() {
         binding.searchCidade.setOnQueryTextListener(object :
             android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                pesquisa = query.toString()
+                if (query?.isNotBlank()== true) {
+                    pesquisa = query.toString().trim()
+                    weatherViewModel.obterPrevisaoAtual(pesquisa)
+                    weatherViewModel.obterPrevisaoDias(pesquisa)
+                    weatherViewModel.obterPrevisoesHoras(pesquisa)
+                    binding.searchCidade.clearFocus()
+                    binding.searchCidade.setQuery("",false)
+                } else {
+                    Toast.makeText(this@MainActivity,"Por favor preencha o campo de pesquisa",Toast.LENGTH_SHORT).show()
+                }
+
                 return true
             }
 
             override fun onQueryTextChange(query: String?): Boolean {
-                return true
+                return false
             }
         })
     }
@@ -74,7 +88,6 @@ class MainActivity : AppCompatActivity() {
                 Log.i("resposta", "observaveis:$listaHoras")
             }
         }
-
         weatherViewModel.listaClimaDias.observe(this) { listaDias ->
             listaDias?.let {
                 adapterDias.adicionarLista(listaDias)
@@ -82,20 +95,27 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        weatherViewModel.listaAtual.observe(this){atual->
+        weatherViewModel.listaAtual.observe(this) { atual ->
             Log.i("respostaAtual", "ObserveDias:$atual")
             val dataFormatada = Conversor.formataDataMes(atual.dt)
-            with(binding){
+            with(binding) {
                 textHojeData.text = dataFormatada
                 textClimaStatus.text = atual.description
-                textMinimaMaxima.text = atual.temp.toString()
-                textClimaUmidade.text="${atual.humidity} %"
-                textClimaUv.text=atual.wind.speed.toString()
-                Picasso.get()
-                    .load(atual.icon)
-                    .into(imageClimaHoje)
+                textMinimaMaxima.text = Conversor.formataTempKelvinCelsius(atual.temp)
+                textClimaUmidade.text = "${atual.humidity} %"
+                textClimaUv.text = "${atual.wind.speed}m/s"
+                textLocalCLima.text = atual.name.replaceFirstChar { it.uppercase() }
+                if (atual.icon.isNotEmpty()) {
+                    Picasso.get()
+                        .load(atual.icon)
+                        .placeholder(R.drawable.loading)
+                        .error(R.drawable.ic_broken_image)
+                        .into(imageClimaHoje)
+                } else {
+                    Toast.makeText(this@MainActivity, "Imagem nao carregada", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
-
         }
     }
 
@@ -107,4 +127,5 @@ class MainActivity : AppCompatActivity() {
                 LinearLayoutManager(applicationContext, RecyclerView.HORIZONTAL, false)
         }
     }
+
 }
