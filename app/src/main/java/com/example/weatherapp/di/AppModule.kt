@@ -4,6 +4,8 @@ import com.example.weatherapp.constantes.Constantes
 import com.example.weatherapp.data.remote.api.IWeatherAPI
 import com.example.weatherapp.data.remote.repository.IWeatherRepository
 import com.example.weatherapp.data.remote.repository.WeatherRepositoryImpl
+import com.example.weatherapp.domain.model.ApiKey
+import com.example.weatherapp.domain.model.Linguagem
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +18,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 object AppModule {
 
     @Provides
-    fun provideApiKey(): String = Constantes.APIKEY
+    fun provideApiKey(): ApiKey = ApiKey(Constantes.APIKEY)
+
+    @Provides
+    fun provideLinguagem(): Linguagem = Linguagem(Constantes.LINGUAGEM)
 
     @Provides
     fun provideRetrofit(): Retrofit {
@@ -31,8 +36,8 @@ object AppModule {
     }
 
     @Provides
-    fun provideWeatherRepository(iWeatherAPI: IWeatherAPI,apiKey:String): IWeatherRepository{
-        return WeatherRepositoryImpl(iWeatherAPI,apiKey)
+    fun provideWeatherRepository(iWeatherAPI: IWeatherAPI, apiKey:ApiKey,linguagem: Linguagem): IWeatherRepository{
+        return WeatherRepositoryImpl(iWeatherAPI,apiKey,linguagem)
     }
 
 

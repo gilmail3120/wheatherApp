@@ -2,6 +2,8 @@ package com.example.weatherapp.data.remote.repository
 
 import android.util.Log
 import com.example.weatherapp.data.remote.api.IWeatherAPI
+import com.example.weatherapp.domain.model.ApiKey
+import com.example.weatherapp.domain.model.Linguagem
 import com.example.weatherapp.domain.model.previsao5dias.WeatherPrevisoesHoras
 import com.example.weatherapp.domain.model.previsao5dias.WheatherPrevisoesDias
 import com.example.weatherapp.domain.model.previsao5dias.Wind
@@ -10,11 +12,11 @@ import com.example.weatherapp.domain.model.previsaoagora.PrevisaoAtual
 import com.example.weatherapp.help.Mensagem
 import javax.inject.Inject
 
-class WeatherRepositoryImpl @Inject constructor(val weatherAPI: IWeatherAPI, val apiKey: String) :
+class WeatherRepositoryImpl @Inject constructor(val weatherAPI: IWeatherAPI, val apiKey: ApiKey,val linguagem: Linguagem) :
     IWeatherRepository {
     override suspend fun obterPrevisaoHoras(cidade: String): List<WeatherPrevisoesHoras> {
         try {
-            val response = weatherAPI.obterPrevisaoDias(cidade, apiKey)
+            val response = weatherAPI.obterPrevisaoDias(cidade,apiKey.value,linguagem.value)
             Log.i("resposta", "repository:$response")
             if (response.isSuccessful) {
                 return response.body()?.list?.map { retorno ->
@@ -40,7 +42,7 @@ class WeatherRepositoryImpl @Inject constructor(val weatherAPI: IWeatherAPI, val
 
     override suspend fun obterPrevisaoDias(cidade: String): List<WheatherPrevisoesDias> {
         try {
-            val response = weatherAPI.obterPrevisaoDias(cidade, apiKey)
+            val response = weatherAPI.obterPrevisaoDias(cidade, apiKey.value,linguagem.value)
             if (response.isSuccessful) {
 
                 return response.body()?.list?.map { retorno ->
@@ -65,7 +67,7 @@ class WeatherRepositoryImpl @Inject constructor(val weatherAPI: IWeatherAPI, val
 
     override suspend fun obterPrevisaoAtual(cidade: String): PrevisaoAtual {
         try {
-            val response = weatherAPI.obterPrevisaoAtual(cidade, apiKey)
+            val response = weatherAPI.obterPrevisaoAtual(cidade, apiKey.value,linguagem.value)
             val resultado = response.body()
             if (response.isSuccessful && response != null && resultado != null) {
                 Log.i("respostaAtual", "ObserveDias:$resultado")
