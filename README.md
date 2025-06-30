@@ -43,8 +43,6 @@ O **WeatherApp** é um aplicativo Android nativo desenvolvido em Kotlin que perm
 - **Picasso** (para carregamento de imagens)
 - **Jetpack Libraries:**
   - Lifecycle (LiveData, ViewModel)
-  - AppCompat
-  - Core KTX
 ---
 
 ## 🖼️ Imagens do App
