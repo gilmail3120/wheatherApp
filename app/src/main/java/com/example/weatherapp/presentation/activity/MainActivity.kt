@@ -1,7 +1,7 @@
 package com.example.weatherapp.presentation.activity
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -10,16 +10,18 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.weatherapp.DetalhesActivity
 import com.example.weatherapp.R
+import com.example.weatherapp.constantes.Constantes
 import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.help.Conversor
 import com.example.weatherapp.help.Mensagem
+import com.example.weatherapp.help.SharedPreferences
 import com.example.weatherapp.presentation.adapter.DiasAdapter
 import com.example.weatherapp.presentation.adapter.HorasAdapter
 import com.example.weatherapp.presentation.viewModel.WeatherViewModel
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -27,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapterDias: DiasAdapter
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val weatherViewModel: WeatherViewModel by viewModels()
-    private var pesquisa: String = "nova york"
+    private var pesquisa: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,11 +46,19 @@ class MainActivity : AppCompatActivity() {
         searchViewPesquisa()
     }
 
+
+
     override fun onStart() {
         super.onStart()
-        weatherViewModel.obterPrevisoesHoras(pesquisa)
-        weatherViewModel.obterPrevisaoDias(pesquisa)
-        weatherViewModel.obterPrevisaoAtual(pesquisa)
+        val cidade = SharedPreferences.recuperarPreferences(this)
+        if (cidade!=null){
+            pesquisa = cidade
+            weatherViewModel.obterPrevisoesHoras(pesquisa)
+            weatherViewModel.obterPrevisaoDias(pesquisa)
+            weatherViewModel.obterPrevisaoAtual(pesquisa)
+        }else{
+            pesquisa ="nova york"
+        }
     }
 
     private fun iniciarAdapterDias() {
@@ -67,6 +77,7 @@ class MainActivity : AppCompatActivity() {
                     weatherViewModel.obterPrevisaoAtual(pesquisa)
                     weatherViewModel.obterPrevisaoDias(pesquisa)
                     weatherViewModel.obterPrevisoesHoras(pesquisa)
+                    SharedPreferences.salvaPreferences(this@MainActivity,pesquisa)
                     binding.searchCidade.clearFocus()
                     binding.searchCidade.setQuery("",false)
                 } else {
@@ -88,16 +99,19 @@ class MainActivity : AppCompatActivity() {
         weatherViewModel.listaClimaHoras.observe(this) { listaHoras ->
             listaHoras?.let {
                 adapterHoras.adicionarLista(listaHoras)
-
             }
         }
         weatherViewModel.listaClimaDias.observe(this) { listaDias ->
             listaDias?.let {
                 adapterDias.adicionarLista(listaDias)
-
             }
         }
         weatherViewModel.listaAtual.observe(this) { atual ->
+            binding.cardClimaHoje.setOnClickListener {
+                val intent = Intent(this, DetalhesActivity::class.java)
+                intent.putExtra(Constantes.DADOSATUAL,atual)
+                startActivity(intent)
+            }
             val dataFormatada = Conversor.formataDataMes(atual.dt)
             with(binding) {
                 textHojeData.text = dataFormatada
@@ -116,6 +130,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun iniciarAdapterHoras() {
         adapterHoras = HorasAdapter()
         with(binding) {
@@ -124,5 +139,4 @@ class MainActivity : AppCompatActivity() {
                 LinearLayoutManager(applicationContext, RecyclerView.HORIZONTAL, false)
         }
     }
-
 }

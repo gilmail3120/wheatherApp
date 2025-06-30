@@ -15,6 +15,11 @@ object Conversor {
         return String.format("%.1f°C", celsius)
     }
 
+    fun formataTempKelvinCelsiusSemFormatacao(kelvin:Double): String{
+        val celsius = kelvin-273.15
+        return "${celsius.toInt()}°"
+    }
+
     fun formataDataSemana(timesTamp:Int):String{
         val data = Date(timesTamp.toLong()*1000)
         val formatada = SimpleDateFormat("EEEE", Locale("pt","BR"))
@@ -25,6 +30,10 @@ object Conversor {
         val data = Date(timesTamp.toLong()*1000)
         val formatada = SimpleDateFormat("dd  MMMM", Locale("pt","BR"))
         return formatada.format(data).replaceFirstChar { it.uppercase() }
+    }
+    fun formatarMetrosKm(metros:Int):String{
+        val metros = metros/1000
+        return "${metros} Km"
     }
 
 }

@@ -6,10 +6,8 @@ import com.example.weatherapp.domain.model.ApiKey
 import com.example.weatherapp.domain.model.Linguagem
 import com.example.weatherapp.domain.model.previsao5dias.WeatherPrevisoesHoras
 import com.example.weatherapp.domain.model.previsao5dias.WheatherPrevisoesDias
-import com.example.weatherapp.domain.model.previsao5dias.Wind
-import com.example.weatherapp.domain.model.previsaoagora.CurrentTime
 import com.example.weatherapp.domain.model.previsaoagora.PrevisaoAtual
-import com.example.weatherapp.help.Mensagem
+import com.example.weatherapp.help.FuncoesVazias
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(val weatherAPI: IWeatherAPI, val apiKey: ApiKey,val linguagem: Linguagem) :
@@ -78,12 +76,18 @@ class WeatherRepositoryImpl @Inject constructor(val weatherAPI: IWeatherAPI, val
                 val humidade = resultado.main.humidity
                 val vento = resultado.wind
                 val imageUrl = "https://openweathermap.org/img/wn/${resultado.weather.firstOrNull()?.icon}@2x.png"
-                return PrevisaoAtual(name,data,descricao.toString(),temp,humidade,vento,imageUrl)
+                val temp_min= resultado.main.temp_min
+                val temp_max=resultado.main.temp_max
+                val pressure= resultado.main.pressure
+                val visibility= resultado.visibility
+                val sunrise= resultado.sys.sunrise
+                val sunset =resultado.sys.sunset
+                return PrevisaoAtual(name,data,descricao.toString(),temp,humidade,vento,imageUrl,temp_min,temp_max,pressure,visibility,sunrise,sunset)
             }
 
         } catch (erro: Exception) {
             erro.printStackTrace()
         }
-        return PrevisaoAtual("",1,"",1.1,1, wind =com.example.weatherapp.domain.model.previsaoagora.Wind(speed=0.0, deg = 0, gust = 0.0),"" )
+        return FuncoesVazias.previsaoVazia()
     }
 }

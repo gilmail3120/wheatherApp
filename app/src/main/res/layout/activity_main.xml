@@ -140,7 +140,7 @@
                                 android:id="@+id/imageView6"
                                 android:layout_width="30dp"
                                 android:layout_height="40dp"
-                                app:srcCompat="@drawable/vento" />
+                                app:srcCompat="@drawable/vento2" />
 
                             <TextView
                                 android:id="@+id/textClimaUv"
