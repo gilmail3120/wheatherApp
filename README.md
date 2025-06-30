@@ -46,3 +46,15 @@ O **WeatherApp** é um aplicativo Android nativo desenvolvido em Kotlin que perm
   - AppCompat
   - Core KTX
 ---
+
+## 🖼️ Imagens do App
+<p align="center">
+  <img src="https://drive.google.com/uc?export=view&id=1QNLH1fZ7lDafzC_vRqL4KnunhR4v0EJ5" alt="Screenshot do WeatherApp" width="300"/>
+</p>
+
+<p align="center">
+  <img src="https://drive.google.com/uc?export=view&id=11d5cXcni84WqTwLip2ZohcU956YepQIZ" alt="Screenshot do WeatherApp" width="300"/>
+</p>
+
+
+
